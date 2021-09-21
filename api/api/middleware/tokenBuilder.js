@@ -9,6 +9,7 @@ module.exports = function (user) {
     subject: user.id,
     username: user.username,
     password: user.password,
+    role_name: user.role_name,
   }
   const options = {
     expiresIn: '1d',

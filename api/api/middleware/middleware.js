@@ -9,7 +9,7 @@ const requireUsernamePassword = async (req, res, next) => {
 
   if (!username || !password) {
     res.status(422).json({
-        message: 'username and password required',
+        message: 'Username And Password Required',
       });
   } else {
     next()
@@ -24,11 +24,42 @@ async function checkUsernameTaken(req, res, next) {
     } else {
       next({
         status: 422,
-        message: "username taken"
+        message: "Username Taken"
       })    
     }
   } catch (err) {
     next(err)
+  }
+}
+    //Admin Access
+const only = role_name => (req, res, next) => {
+  if(role_name === req.decodedToken.role_name) {
+    next()
+  } else {
+    next({
+      status: 403,
+      message: 'This Is Not For You'
+    })
+  }
+}
+    //Validate Role
+const validateRoleName = (req, res, next) => {
+  if(!req.body.role_name || !req.body.role_name.trim()) {
+    req.role_name = 'User'
+    next()
+  } else if (req.body.role_name.trim() === 'Admin') {
+    next({
+      status: 422,
+      message: 'Role Name Can Not Be Admin'
+    })
+  } else if (req.body.role_name.trim().length > 32) {
+    next({
+      status: 422,
+      message: 'Role Name Can Not Be Longer Than 32 Chars'
+    })
+  } else {
+    req.role_name = req.body.role_name.trim()
+    next()
   }
 }
     //Exists Username & Password
@@ -38,7 +69,7 @@ const checkUsernamePasswordExist = async (req, res, next) => {
     if(!user || !user.password) {
       next({
         status: 401,
-        message: 'invalid credentials'
+        message: 'Invalid Credentials'
       })
     } else {
       req.user = user
@@ -54,5 +85,7 @@ const checkUsernamePasswordExist = async (req, res, next) => {
 module.exports = {
     requireUsernamePassword,
     checkUsernameTaken,
+    only,
+    validateRoleName,
     checkUsernamePasswordExist,
 }

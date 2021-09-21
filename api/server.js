@@ -35,15 +35,6 @@ server.use('/api/auth', authRouter);
 server.use('/api/items', itemsRouter);
 
 
-// server.get('/api/users', async (req, res) => {
-//   res.json(await getAllUsers())
-// })
-
-// server.post('/api/users', async (req, res) => {
-//   res.status(201).json(await insertUser(req.body))
-// })
-
-
 //Error-Handling Middleware
 server.use((err, req, res, next) => { // eslint-disable-line
   res.status(err.status || 500).json({

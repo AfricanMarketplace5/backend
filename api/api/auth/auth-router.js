@@ -9,13 +9,15 @@ const tokenBuilder = require('../middleware/tokenBuilder')
 
 //Ednpoints
 router.post('/register', 
+  md.validateRoleName,
   md.requireUsernamePassword, 
   md.checkUsernameTaken, 
   (req, res, next) => {
     const { username, password } = req.body
+    const { role_name } = req
     const hash = bcrypt.hashSync(password, 8);
 
-    Users.add({ username, password: hash })
+    Users.add({ username, password: hash, role_name })
       .then(saved => {
         res.status(201).json(saved);
       })
@@ -30,13 +32,13 @@ router.post('/login',
       const token = tokenBuilder(req.user);
            
       res.status(200).json({
-        message: `welcome, ${req.user.username}`,
+        message: `Welcome, ${req.user.username}`,
         token,
       });
     } else {
       next({
         status: 401,
-        message: 'invalid credentials' 
+        message: 'Invalid Credentials' 
       });
     }
 });
