@@ -1,6 +1,6 @@
 //ADJUST FOR POSTGRES
 //Imports
-const db = require('../../data/dbConfig')
+const db = require('../../data/db-config')
 
 
 //DATABASE FUNCTIONS

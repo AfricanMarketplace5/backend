@@ -1,6 +1,6 @@
 //Imports
 const express = require('express');
-const Helper = require('./model'); //Object W/ Methods
+const Helper = require('./items-model'); //Object W/ Methods
 
 
 //Miniatire Instance Of Express Server
