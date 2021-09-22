@@ -1,6 +1,5 @@
-//POSTGRES KNEX
-//Will NEED items-owners table
-
+//POSTGRES KNEX NEEDED???
+//Export Up
 exports.up = async (knex) => {
   await knex.schema
     .createTable('roles', roles => {
@@ -17,42 +16,43 @@ exports.up = async (knex) => {
     })
 
     .createTable('users', users => {
-      users.increments('user_id') //Primary Key
-      users.string('username', 100).notNullable().unique()
-      users.string('password', 100).notNullable()
+        users.increments('user_id') //Primary Key
+        users.string('username', 100).notNullable().unique()
+        users.string('password', 100).notNullable()
+        users.integer('role_id') //Foreign Key
+          .unsigned()
+          .notNullable()
+          .references('role_id')
+          .inTable('roles')
+          .onUpdate('RESTRICT')
+          .onDelete('RESTRICT')
+    })
+
+    .createTable('users_items', table => {
+        table.increments('users_items_id') //PK
+        table.integer('user_id') //FK
+            .unsigned()
+            .notNullable()
+            .references('user_id')
+            .inTable('projects')
+            .onDelete('RESTRICT')
+            .onUpdate('RESTRICT')
+        table.integer('item_id') //FK
+            .unsigned()
+            .notNullable()
+            .references('item_id')
+            .inTable('resources')
+            .onDelete('RESTRICT')
+            .onUpdate('RESTRICT')
     })
 }
-// users.integer('role_id') //Foreign Key
-//         .unsigned()
-//         .notNullable()
-//         .references('role_id')
-//         .inTable('roles')
-//         .onUpdate('RESTRICT')
-//         .onDelete('RESTRICT')
-//     users.integer('item_id') //Foreign Key
-//         .unsigned()
-//         .notNullable()
-//         .references('item_id')
-//         .inTable('items')
-//         .onUpdate('RESTRICT')
-//         .onDelete('RESTRICT')
 
+
+//Export Down
 exports.down = async (knex) => {
   await knex.schema
+    .dropTableIfExists('users_items')
     .dropTableIfExists('users')
     .dropTableIfExists('items')
     .dropTableIfExists('roles')
 }
-// exports.up = async (knex) => {
-//   await knex.schema
-//     .createTable('users', (users) => {
-//       users.increments('user_id')
-//       users.string('username', 200).notNullable()
-//       users.string('password', 200).notNullable()
-//       users.timestamps(false, true)
-//     })
-// }
-
-// exports.down = async (knex) => {
-//   await knex.schema.dropTableIfExists('users')
-// }

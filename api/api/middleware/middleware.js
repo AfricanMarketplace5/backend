@@ -18,7 +18,7 @@ const requireUsernamePassword = async (req, res, next) => {
     //Unique Username
 async function checkUsernameTaken(req, res, next) {
   try {
-    const users = await findBy( {username: req.body.username })
+    const users = await findBy({username: req.body.username })
     if(!users.length) {
       next()
     } else {

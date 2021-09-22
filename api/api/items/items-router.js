@@ -1,6 +1,7 @@
 //Imports
 const router = require('express').Router()
 const Item = require('./items-model'); //Object W/ Methods
+const md = require('../middleware/middleware')
 const restrict = require('../middleware/restrict')
 
 
@@ -18,38 +19,61 @@ router.get('/',
 });
 
 //[GET] Item By ItemId
-router.get("/:itemId", (req, res, next) => {
-  const { itemId } = req.params;
+router.get("/:itemId",
+  restrict,
+  (req, res, next) => {
+    const { itemId } = req.params;
 
-  if (itemId) {
-    Item.getByItemId(itemId)
-      .then((specificItem) => {
-        res.status(200).json(specificItem[0]);
-      })
-      .catch(next)
-  } else {
-    res.status(406).json({ message: "Item Id Required" });
-  }
+    if (itemId) {
+      Item.getItemById(itemId)
+        .then((specificItem) => {
+          res.status(200).json(specificItem[0]);
+        })
+        .catch(next)
+    } else {
+      res.status(406).json({ message: "Item Id Required" });
+    }
+});
+
+//[GET] Item By Location
+router.get("/:location",
+  restrict,
+  (req, res, next) => {
+    const { location } = req.params;
+
+    if (location) {
+      Item.findItemBy(location)
+        .then((specificItem) => {
+          res.status(200).json(specificItem[0]);
+        })
+        .catch(next)
+    } else {
+      res.status(406).json({ message: "Item Location Required" });
+    }
 });
 
 //[PUT] Item By ItemId
-router.put("/:itemId", (req, res, next) => {
-  const updatedItem = req.body;
+router.put("/:itemId",
+  restrict,
+  md.only,
+  (req, res, next) => {
+    const updatedItem = req.body;
 
-  if (updatedItem.nickname && req.params.itemId) {
-    Item.updatePlantByitemId(updatedItem)
-      .then((update) => {
-        res.status(200).json(update[0]);
-      })
-      .catch(next)
-  } else {
-    res.status(406).json({ message: "ItemId And Name Are Required" });
-  }
+    if (updatedItem.nickname && req.params.itemId) {
+      Item.updateItemById(updatedItem)
+        .then((update) => {
+          res.status(200).json(update[0]);
+        })
+        .catch(next)
+    } else {
+      res.status(406).json({ message: "ItemId And Name Are Required" });
+    }
 });
 
 //[POST]
 router.post('/', 
   restrict,
+  md.only, 
   (req, res, next) => {
     Item.createItem(req.body)
       .then(resource => {
@@ -59,14 +83,17 @@ router.post('/',
 });
 
 //[DELETE] Plant By itemId
-router.delete("/:itemId", (req, res, next) => {
-  const { itemId } = req.params;
+router.delete("/:itemId", 
+  restrict,
+  md.only,
+  (req, res, next) => {
+    const { itemId } = req.params;
 
-  Item.deletePlant(itemId)
-    .then((resolution) => {
-      res.status(200).json(resolution);
-    })
-    .catch(next)
+    Item.deleteItem(itemId)
+      .then((resolution) => {
+        res.status(200).json(resolution);
+      })
+      .catch(next)
 });
 
 

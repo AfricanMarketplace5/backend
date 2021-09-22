@@ -1,4 +1,7 @@
+    //Still Need;
 //ADJUST FOR POSTGRES
+
+
 //Imports
 const db = require('../../data/db-config')
 
@@ -41,10 +44,6 @@ async function add({ username, password, role_name }) {
   })
   return findById(created_user_id)
 }
-// async function add(user) {
-//   const [id] = await db("users").insert(user);
-//   return findById(id);
-// }
 
 
 //Exports; Exposing
