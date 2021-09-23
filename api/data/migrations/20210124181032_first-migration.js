@@ -12,7 +12,7 @@ exports.up = async (knex) => {
         items.string('item_name', 100).notNullable()
         items.string('item_description', 200).notNullable()
         items.string('item_location', 100).notNullable()
-        items.string('item_price', 32).notNullable()
+        items.integer('item_price', 32).notNullable()
     })
 
     .createTable('users', users => {

@@ -4,29 +4,29 @@
 
 
 //Imports
-//const db = require('../../data/db-config')
+const db = require('../../data/db-config')
 
 
 //DATABASE FUNCTIONS
-// function getItems() {
+function getItems() {
 
-// }
+}
 
-// function getItemBy(filter) {
+function getItemBy(filter) {
 
-// }
+}
 
-// function getItemById(item_id) {
+function getItemById(item_id) {
 
-// }
+}
 
 
 // //Exports; Exposing
-// module.exports = {
-//     getItems,
-//     getItemBy,
-//     getItemById,
-//     updateItemById,
-//     createItem,
-//     deleteItem,
-// }
+module.exports = {
+    getItems,
+    getItemBy,
+    getItemById,
+    updateItemById,
+    createItem,
+    deleteItem,
+}
