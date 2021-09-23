@@ -9,9 +9,10 @@ const tokenBuilder = require('../middleware/tokenBuilder')
 
 //Ednpoints
 router.post('/register', 
-  md.validateRoleName,
   md.requireUsernamePassword, 
   md.checkUsernameTaken, 
+  md.validateRoleName,
+
   (req, res, next) => {
     const { username, password } = req.body
     const { role_name } = req
