@@ -13,6 +13,7 @@ router.get('/',
   (req, res, next) => {
     Item.getItems()
       .then(resource => {
+
         res.status(200).json(resource);
       })
       .catch(next);
@@ -26,8 +27,8 @@ router.get("/:itemId",
 
     if (itemId) {
       Item.getItemById(itemId)
-        .then((specificItem) => {
-          res.status(200).json(specificItem[0]);
+        .then(specificItem => {
+          res.status(200).json(specificItem);
         })
         .catch(next)
     } else {
@@ -54,13 +55,14 @@ router.get("/:location",
 
 //[PUT] Item By ItemId
 router.put("/:itemId",
-  restrict,
-  md.only,
+  // restrict,
+  // md.only,
   (req, res, next) => {
     const updatedItem = req.body;
+    const { itemId } = req.params;
 
-    if (updatedItem.nickname && req.params.itemId) {
-      Item.updateItemById(updatedItem)
+    if (updatedItem.item_name) {
+      Item.updateItemById(itemId,updatedItem)
         .then((update) => {
           res.status(200).json(update[0]);
         })
@@ -73,7 +75,7 @@ router.put("/:itemId",
 //[POST]
 router.post('/', 
   restrict,
-  md.only, 
+  // md.only, 
   (req, res, next) => {
     Item.createItem(req.body)
       .then(resource => {
@@ -85,7 +87,7 @@ router.post('/',
 //[DELETE] Plant By itemId
 router.delete("/:itemId", 
   restrict,
-  md.only,
+  // md.only,
   (req, res, next) => {
     const { itemId } = req.params;
 
