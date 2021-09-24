@@ -21,11 +21,15 @@ function findBy(filter) {
 }
 
 function findById(user_id) {
-  return db("users as u")
-    .join("roles as r", "u.role_id", "=", "r.role_id")
+  // return
+  console.log(user_id)
+
+  const test = db("users as u")
+    .join("roles as r", "u.role_id", "r.role_id")
     .select("u.user_id", "u.username", "u.password", "r.role_name")
-    .where("u.user_id", user_id)
+    .where({user_id})
     .first();
+    return test
 }
 
 async function add({ username, password, role_name }) {
@@ -36,11 +40,12 @@ async function add({ username, password, role_name }) {
     if (role) {
       role_id_to_use = role.role_id
     } else {
-      const [role_id] = await trx('roles').insert({ role_name: role_name })
+      const role_id = await trx('roles').insert({ role_name: role_name }).returning("user_id")
       role_id_to_use = role_id
     }
-    const [user_id] = await trx('users').insert({ username, password, role_id: role_id_to_use })
-    created_user_id = user_id
+    const user_id = await trx('users').insert({ username, password, role_id: role_id_to_use }).returning("user_id");
+    created_user_id = user_id[0]
+
   })
   return findById(created_user_id)
 }
